@@ -1,14 +1,8 @@
 package main;
 
-import java.util.Scanner;
-
-import main.models.*;
-
 public class Program {
 
-	public static void main(String[] args) {		
-		FileDAO.initDAO();
-		
+	public static void main(String[] args) {				
 		Menu.mainProgram();			
 	}
 	

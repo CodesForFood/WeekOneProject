@@ -6,32 +6,48 @@ import main.models.*;
 
 public class FileDAO {
 
-	public final static String PATH = "src/main/resources/";	
+	private final static String PATH = "src/main/resources/";	
 	
 	private static File authorFile;
 	private static File bookFile;
 	private static File publisherFile;	
 	
-	public static void initDAO() {
+	public FileDAO() {
 		authorFile = new File(PATH + "Author.csv");
 		bookFile = new File(PATH + "Book.csv");
 		publisherFile = new File(PATH + "Publisher.csv");		
 		
-		readAll();
-	}	
+		readAll();		
+	}		
 	
-	public static File getAuthorFile() { return authorFile; }
-	public static File getBookFile() { return bookFile; } 
-	public static File getPublisherFile() { return publisherFile; }
+	private static File getAuthorFile() { return authorFile; }
+	private static File getBookFile() { return bookFile; } 
+	private static File getPublisherFile() { return publisherFile; }
 	
 	
-	public static void readAll() {
+	private void readAll() {
 		readAuthors();
 		readPublishers();
 		readBooks();
 	}
 	
-	public static void readAuthors() {		
+	public void updateAuthors() {
+		writeAuthors();
+		readAuthors();
+	}
+	
+	public void updateBooks() {
+		writeBooks();
+		readBooks();		
+	}
+	
+	public void updatePublishers() {
+		writePublishers();
+		readPublishers();
+	}
+	
+	
+	private void readAuthors() {		
 		try {				
 			if(getAuthorFile().exists()) {
 				Scanner scan = new Scanner(getAuthorFile());
@@ -55,7 +71,7 @@ public class FileDAO {
 		
 	}
 	
-	public static void readPublishers() {
+	private void readPublishers() {
 		try {			
 			if(getPublisherFile().exists()) {
 				Scanner scan = new Scanner(getPublisherFile());
@@ -78,7 +94,7 @@ public class FileDAO {
 		}
 	}
 	
-	public static void readBooks() {
+	private void readBooks() {
 		try {						
 			if(getBookFile().exists()) {
 				Scanner scan = new Scanner(getBookFile());
@@ -106,7 +122,7 @@ public class FileDAO {
 	}
 	
 	
-	public static void writeAuthors() {
+	private void writeAuthors() {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(getAuthorFile()));			
 			for(Author auth : LibraryManager.authorList) {
@@ -122,7 +138,7 @@ public class FileDAO {
 		}	
 	}
 	
-	public static void writePublishers() {
+	private void writePublishers() {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(getPublisherFile()));
 			for(Publisher pub : LibraryManager.publisherList) {
@@ -138,7 +154,7 @@ public class FileDAO {
 		}
 	}
 	
-	public static void writeBooks() {
+	private void writeBooks() {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(getBookFile()));
 			for(Book book : LibraryManager.bookList) {
