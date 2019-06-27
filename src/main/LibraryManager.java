@@ -22,13 +22,13 @@ public class LibraryManager {
 	
 	public void showAuthorList() {
 		for(Author auth : authorList) {
-			Program.say(auth.getId() + ") " + auth.getName());
+			UI.say(auth.getId() + ") " + auth.getName());
 		}
 	}
 	
 	public void showPublisherList() {
 		for(Publisher pub : publisherList) {
-			Program.say(pub.getId() + ") " + pub.getName());
+			UI.say(pub.getId() + ") " + pub.getName());
 		}
 	}
 	
@@ -37,7 +37,7 @@ public class LibraryManager {
 			final String authName = book.getAuthor().getName();
 			final String pubName = book.getPublisher().getName();		
 			
-			Program.say(book.getId() + ") " + book.getName() + ", Author: " + authName + ", Publisher: " + pubName);
+			UI.say(book.getId() + ") " + book.getName() + ", Author: " + authName + ", Publisher: " + pubName);
 		}
 	}
 	
@@ -97,8 +97,8 @@ public class LibraryManager {
 	}	
 
 	public Author createAuthor() {
-		Program.say("Please enter the name of the author");	
-		String name = Menu.scan.nextLine();
+		UI.say("Please enter the name of the author");	
+		String name = UI.readLine();
 		Author author = new Author(getMaxId(AUTHOR)+ 1, name);
 		authorList.add(author);			
 		
@@ -108,9 +108,8 @@ public class LibraryManager {
 	}
 	
 	public Publisher createPublisher() {
-		Program.say("Please enter the name of the publisher");
-
-		String name = Menu.scan.nextLine();
+		UI.say("Please enter the name of the publisher");
+		String name = UI.readLine();
 		
 		Publisher pub = new Publisher(getMaxId(PUBLISHER) + 1, name);
 		publisherList.add(pub);		
@@ -121,8 +120,8 @@ public class LibraryManager {
 	}
 	
 	public Book createBook() {
-		Program.say("Please enter the name of the book");
-		String name = Menu.scan.nextLine();
+		UI.say("Please enter the name of the book");
+		String name = UI.readLine();
 		
 		Author auth = newOrOldAuthor();
 		Publisher pub = newOrOldPublisher();
@@ -138,51 +137,40 @@ public class LibraryManager {
 	public void updateBook() {
 		boolean flag = true;
 		while(flag) {
-			Program.say("Which book do you want to update?");
-			showBookList();
-			String input = Menu.scan.nextLine();
-			if(Program.tryParseInt(input)) {
-				int choice = Integer.parseInt(input);
-				Book book = getBookById(choice);
-				if(book.getId() == 0) {
-					Program.say("Not a valid option");
-					continue;
-				}
-				Program.say("Which do you want to change? \n<1>Book's name \n<2>Author of book \n<3>Publisher of book");
-				input = Menu.scan.nextLine();
-				if(Program.tryParseInt(input)) {
-					choice = Integer.parseInt(input);
-					if(choice == 1) {
-						Program.say("What is the new name of the book?");
-						String name = Menu.scan.nextLine();
-						book.setName(name);
-						flag = false;
-						fDAO.updateBooks();
-					}
-					else if(choice == 2) {
-						Author auth = promptGetAuthor();
-						book.setAuthor(auth);
-						flag = false;
-						fDAO.updateBooks();
-					}
-					else if(choice == 3) {
-						Publisher pub = promptGetPublisher();
-						book.setPublisher(pub);
-						flag = false;
-						fDAO.updateBooks();
-					}
-					else {
-						Program.say("Not a valid option");
-						flag = true;
-					}
-				}
-				else {
-					Program.say("Invalid input");
-					flag = true;
-				}				
+			UI.say("Which book do you want to update?");
+			showBookList();		
+			
+			int choice = UI.readInt();
+			
+			Book book = getBookById(choice);
+			if(book.getId() == 0) {
+				UI.say("Not a valid option");
+				continue;
+			}
+			UI.say("Which do you want to change? \n<1>Book's name \n<2>Author of book \n<3>Publisher of book");
+			choice = UI.readInt();
+				
+			if(choice == 1) {
+				UI.say("What is the new name of the book?");
+				String name = UI.readLine();
+				book.setName(name);
+				flag = false;
+				fDAO.updateBooks();
+			}
+			else if(choice == 2) {
+				Author auth = promptGetAuthor();
+				book.setAuthor(auth);
+				flag = false;
+				fDAO.updateBooks();
+			}
+			else if(choice == 3) {
+				Publisher pub = promptGetPublisher();
+				book.setPublisher(pub);
+				flag = false;
+				fDAO.updateBooks();
 			}
 			else {
-				Program.say("Not a valid option");
+				UI.badInput();
 				flag = true;
 			}
 		}
@@ -190,64 +178,68 @@ public class LibraryManager {
 	
 	private Author promptGetAuthor() {
 		boolean flag = true;
+		Author auth = new Author();
 		while(flag) {
-			Program.say("Which author do you want to use?");
-			showAuthorList();
-			String input = Menu.scan.nextLine();
-			if(Program.tryParseInt(input)) {
-				int choice = Integer.parseInt(input);
-				flag = false;
-				return getAuthorById(choice);
+			UI.say("Which author do you want to use?");
+			showAuthorList();		
+			int choice = UI.readInt();
+			auth = getAuthorById(choice);
+			if(auth.getId() == 0) {
+				UI.badInput();
+				flag = true;
+				continue;
 			}
 			else {
-				flag = true;
-				Program.say("Not a valid option");
-			}			
+				flag = false;
+			}					
 		}
-		return new Author();		
+		return auth;		
 	}
 	
 	private Publisher promptGetPublisher() {
 		boolean flag = true;
+		Publisher pub = new Publisher();
+		
 		while(flag) {
-			Program.say("Which publisher do you want to use?");
-			showPublisherList();
-			String input = Menu.scan.nextLine();
-			if(Program.tryParseInt(input)) {
-				int choice = Integer.parseInt(input);
-				flag = false;
-				return getPublisherById(choice);
+			UI.say("Which publisher do you want to use?");
+			showPublisherList();			
+			int choice = UI.readInt();
+			pub = getPublisherById(choice);
+			if(pub.getId() == 0) {
+				UI.badInput();
+				flag = true;
+				continue;
 			}
 			else {
-				flag = true;
-				Program.say("Not a valid option");
-			}			
+				flag = false;					
+			}					
 		}
-		return new Publisher();		
+		return pub;		
 	}
 	
 	public void updateAuthor() {
 		boolean flag = true;
 		
 		while(flag) {
-			Program.say("Which Author do you want to edit?");
+			UI.say("Which Author do you want to edit?");
 			showAuthorList();	
 			
-			String input = Menu.scan.nextLine();
-			if(Program.tryParseInt(input)) {
-				int choice = Integer.parseInt(input);
-				Author auth = getAuthorById(choice);
-				Program.say("What is the new name of the Author?");
-				String name = Menu.scan.nextLine();
+			int choice = UI.readInt();
+			Author auth = getAuthorById(choice);
+			
+			if(auth.getId() == 0) {
+				UI.badInput();
+				flag = true;
+				continue;
+			}
+			else {
+				UI.say("What is the new name of the Author?");
+				String name = UI.readLine();
 				auth.setName(name);			
 				
 				fDAO.updateAuthors();
 				flag = false;
-			}
-			else {
-				Program.say("Invalid input");
-				flag = true;
-			}			
+			}						
 		}		
 	}
 	
@@ -255,38 +247,41 @@ public class LibraryManager {
 		boolean flag = true;
 		
 		while(flag) {
-			Program.say("Which Publisher do you want to edit?");
-			showPublisherList();	
-			
-			String input = Menu.scan.nextLine();
-			if(Program.tryParseInt(input)) {
-				int choice = Integer.parseInt(input);
-				Publisher pub = getPublisherById(choice);
-				Program.say("What is the new name of the Publisher?");
-				String name = Menu.scan.nextLine();
+			UI.say("Which Publisher do you want to edit?");
+			showPublisherList();			
+		
+			int choice = UI.readInt();
+			Publisher pub = getPublisherById(choice);
+			if(pub.getId() == 0) {
+				UI.badInput();
+				continue;
+			}
+			else {
+				UI.say("What is the new name of the Publisher?");
+				String name = UI.readLine();
 				pub.setName(name);			
 				
 				fDAO.updatePublishers();
 				flag = false;
-			}
-			else {
-				Program.say("Invalid input");
-				flag = true;
-			}			
+			}				
 		}		
 	}
 	
 	public void deleteAuthor() {
 		boolean flag = true;
 		while(flag) {
-			Program.say("Which author do you want to delete?");
+			UI.say("Which author do you want to delete?");
 			showAuthorList();
 			
-			String input = Menu.scan.nextLine();
+			int choice = UI.readInt();
+			Author auth = getAuthorById(choice);
 			
-			if(Program.tryParseInt(input)) {
-				int choice = Integer.parseInt(input);
-				authorList.remove(getAuthorById(choice));
+			if(auth.getId() == 0) {
+				UI.badInput();
+				continue;
+			}
+			else {
+				authorList.remove(auth);
 				for(Book book : bookList) {
 					if(book.getAuthor().getId() == choice) {
 						book.setAuthor(new Author());
@@ -294,25 +289,25 @@ public class LibraryManager {
 				}
 				fDAO.updateAuthors();
 				fDAO.updateBooks();
-				flag = false;
-			}
-			else {
-				Program.say("Invalid option");				
-			}
+				flag = false;	
+			}		
 		}
-		
 	}
 	
 	public void deletePublisher() {
 		boolean flag = true;
 		while(flag) {
-			Program.say("Which publisher do you want to delete?");
+			UI.say("Which publisher do you want to delete?");
 			showPublisherList();			
-			String input = Menu.scan.nextLine();
 			
-			if(Program.tryParseInt(input)) {
-				int choice = Integer.parseInt(input);
-				publisherList.remove(getPublisherById(choice));
+			int choice = UI.readInt();
+			Publisher pub = getPublisherById(choice);
+			if(pub.getId() == 0) {
+				UI.badInput();
+				continue;
+			}
+			else {
+				publisherList.remove(pub);
 				for(Book book : bookList) {
 					if(book.getPublisher().getId() == choice) {
 						book.setPublisher(new Publisher());
@@ -320,115 +315,99 @@ public class LibraryManager {
 				}
 				fDAO.updatePublishers();
 				fDAO.updateBooks();
-				flag = false;
-			}
-			else {
-				Program.say("Invalid option");				
-			}
+				flag = false;	
+			}	
 		}	
 	}
 	
 	public void deleteBook() {
 		boolean flag = true;
 		while(flag) {
-			Program.say("Which book do you want to delete?");
-			showBookList();
-			String input = Menu.scan.nextLine();
+			UI.say("Which book do you want to delete?");
+			showBookList();			
 			
-			if(Program.tryParseInt(input)) {
-				int choice = Integer.parseInt(input);
-				bookList.remove(getBookById(choice));
-				fDAO.updateBooks();			
-				flag = false;
+			int choice = UI.readInt();
+			Book book = getBookById(choice);
+			if(book.getId() == 0) {
+				UI.badInput();
+				continue;
 			}
 			else {
-				Program.say("Invalid input");
-				flag = true;
-			}
-		}		
+				bookList.remove(book);
+				fDAO.updateBooks();			
+				flag = false;	
+			}			
+		}			
 	}
 	
 	
 	private Publisher newOrOldPublisher() {
 		boolean flag = true;
+		Publisher pub = new Publisher();
+		
 		while(flag) {
-			Program.say("Would you like to \n<1>Create new Publisher \n<2>Select from an existing one");		
-			String input = Menu.scan.nextLine();								
+			UI.say("Would you like to \n<1>Create new Publisher \n<2>Select from an existing one");		
+			int choice = UI.readInt();				
 			
-			if(Program.tryParseInt(input)) {
-				int choice = Integer.parseInt(input);
+			if(choice == 1) {
+				flag = false;
+				pub = createPublisher();				
+			}
+			else if(choice == 2) {
+				flag = false;
+				showPublisherList();
+				int numChoice = UI.readInt();
+				pub = getPublisherById(numChoice);
 				
-				if(choice == 1) {
-					flag = false;
-					return createPublisher();
-					
+				if(pub.getId() == 0) {
+					UI.badInput();
+					continue;
 				}
-				else if(choice == 2) {
-					flag = false;
-					showPublisherList();
-					String strChoice = Menu.scan.nextLine();
-					if(Program.tryParseInt(strChoice)) {
-						int numChoice = Integer.parseInt(strChoice);
-						return getPublisherById(numChoice);
-					}
-					else {
-						Program.say("Not a valid choice");
-						flag = true;
-					}
-									
-				}	
 				else {
-					Program.say("Not a valid choice");
-					flag = true;
-				}					
-			}
+					flag = false;					
+				}				
+			}		
 			else {
-				Program.say("Not a valid choice");
-				flag= true;
-			}
+				UI.say("Not a valid choice");
+				flag = true;
+			}					
+			
 		}	
-		return new Publisher();
+		return pub;
 	}
 	
 	
 	private Author newOrOldAuthor() {
 		boolean flag = true;
+		Author auth = new Author();
 		while(flag) {
-			Program.say("Would you like to \n<1>Create new Author \n<2>Select from an existing one");		
-			String choiceOne = Menu.scan.nextLine();								
+			UI.say("Would you like to \n<1>Create new Author \n<2>Select from an existing one");		
+		
+			int choiceNum = UI.readInt();
 			
-			if(Program.tryParseInt(choiceOne)) {
-				int choiceNum = Integer.parseInt(choiceOne);
+			if(choiceNum == 1) {
+				flag = false;
+				auth = createAuthor();				
+			}
+			else if(choiceNum == 2) {
+				showAuthorList();				
+				int numChoice = UI.readInt();
+				auth = getAuthorById(numChoice);
 				
-				if(choiceNum == 1) {
-					flag = false;
-					return createAuthor();				
+				if(auth.getId() == 0) {
+					UI.badInput();
+					continue;
 				}
-				else if(choiceNum == 2) {
-					flag = false;
-					showAuthorList();
-					String strChoice = Menu.scan.nextLine();
-					if(Program.tryParseInt(strChoice)) {
-						int numChoice = Integer.parseInt(strChoice);
-						return getAuthorById(numChoice);
-					}
-					else {
-						Program.say("Not a valid choice");
-						flag = true;
-					}			
-				}	
 				else {
-					Program.say("Not a valid choice");
-					flag = true;
-				}
-					
-			}
+					flag = false;
+				}					
+			}	
 			else {
-				Program.say("Not a valid choice");
-				flag = true;
-			}
+				UI.badInput();
+				continue;
+			}		
 		}
-		return new Author();
+		return auth;
 	}
 	
 	

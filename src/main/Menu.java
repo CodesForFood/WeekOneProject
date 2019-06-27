@@ -1,11 +1,8 @@
 package main;
 
-import java.util.Scanner;
-
-
 public class Menu {
 
-	public static Scanner scan = new Scanner(System.in);
+	
 	private static LibraryManager manager;
 	
 	public final static String DIVIDER = "======================================================";
@@ -41,7 +38,7 @@ public class Menu {
 		catch(Exception ex) {
 		}
 		finally {
-			scan.close();
+			UI.closeScanner();
 		}
 		
 	}
@@ -49,164 +46,144 @@ public class Menu {
 	private static void runMainMenu() {				
 		boolean flag = true;
 		while(flag) {
-			Program.say(MAINMENU);	
-			String choice = scan.nextLine();
-			if(Program.tryParseInt(choice)) {
-				int choiceNum = Integer.parseInt(choice);
-				
-				switch(choiceNum) {
-					case 1:
-						printDivider();
-						runBookMenu();
-					break;					
-					case 2:
-						printDivider();
-						runAuthorMenu();
-					break;
-					case 3:
-						printDivider();
-						runPublisherMenu();
-					break;					
-					case 99:
-						flag = false;
-					break;
-					default:
-						Program.say("Not a valid option");						
-					break;
-				}								
-			}
-			else {
-				Program.say("Invalid option");
-				flag = true;
-			}
-		}					
+			UI.say(MAINMENU);	
+			int choiceNum = UI.readInt();				
+			switch(choiceNum) {
+				case 1:
+					flag = false;
+					printDivider();
+					runBookMenu();
+				break;					
+				case 2:
+					flag = false;
+					printDivider();
+					runAuthorMenu();
+				break;
+				case 3:
+					flag = false;
+					printDivider();
+					runPublisherMenu();
+				break;					
+				case 99:
+					flag = false;
+				break;
+				default:
+					flag = true;
+					UI.say("Not a valid option");						
+				break;
+			}								
+		}				
 	}
 	
 	private static void runBookMenu() {		
 		boolean flag = true;
 		while(flag) {
-			Program.say(BOOKMENU);
-			String choice = scan.nextLine();
-			if(Program.tryParseInt(choice)) {
-				int choiceNum = Integer.parseInt(choice);
-				
-				switch(choiceNum) {
-					case 1:
-						printDivider();
-						manager.showBookList();						
-					break;
-					case 2:
-						printDivider();
-						manager.createBook();
-					break;
-					case 3:
-						printDivider();
-						manager.updateBook();												
-					break;
-					case 4:
-						printDivider();
-						manager.deleteBook();
-					break;
-					case 99:
-						flag = false;
-						printDivider();
-						runMainMenu();
-					break;
-					default:
-						Program.say("Not a valid option");						
-					break;
-				}								
-			}
-			else {
-				Program.say("Not a valid option");				
-			}
-		}	
-		
+			UI.say(BOOKMENU);	
+			
+			int choiceNum = UI.readInt();
+			
+			switch(choiceNum) {
+				case 1:
+					printDivider();
+					manager.showBookList();	
+					printDivider();
+				break;
+				case 2:
+					printDivider();
+					manager.createBook();
+				break;
+				case 3:					
+					printDivider();
+					manager.updateBook();												
+				break;
+				case 4:					
+					printDivider();
+					manager.deleteBook();
+				break;
+				case 99:
+					flag = false;
+					printDivider();
+					runMainMenu();
+				break;
+				default:
+					UI.say("Not a valid option");						
+				break;
+			}					
+		}		
 	}
 	
 	private static void runAuthorMenu() {		
 		boolean flag = true;
 		while(flag) {
-			Program.say(AUTHORMENU);
-			String choice = scan.nextLine();
-			if(Program.tryParseInt(choice)) {
-				int choiceNum = Integer.parseInt(choice);
-				
-				switch(choiceNum) {
-					case 1:
-						printDivider();
-						manager.showAuthorList();						
-					break;
-					case 2:
-						printDivider();
-						manager.createAuthor();
-					break;
-					case 3:
-						printDivider();
-						manager.updateAuthor();
-					break;
-					case 4:
-						printDivider();
-						manager.deleteAuthor();
-					break;
-					case 99:
-						flag = false;
-						printDivider();
-						runMainMenu();
-					break;
-					default:
-						Program.say("Not a valid option");						
-					break;
-				}								
-			}
-			else {
-				Program.say("Not a valid option");
-			}
-		}	
-		
+			UI.say(AUTHORMENU);
+			
+			int choiceNum = UI.readInt();
+			
+			switch(choiceNum) {
+				case 1:
+					printDivider();
+					manager.showAuthorList();	
+					printDivider();
+				break;
+				case 2:					
+					printDivider();
+					manager.createAuthor();
+				break;
+				case 3:					
+					printDivider();
+					manager.updateAuthor();
+				break;
+				case 4:
+					printDivider();
+					manager.deleteAuthor();
+				break;
+				case 99:
+					flag = false;
+					printDivider();
+					runMainMenu();
+				break;
+				default:
+					UI.say("Not a valid option");						
+				break;
+			}								
+		}		
 	}
 	
 	private static void runPublisherMenu() {
 		boolean flag = true;
 		while(flag) {
-			Program.say(PUBLISHERMENU);
-			String choice = scan.nextLine();
-			if(Program.tryParseInt(choice)) {
-				int choiceNum = Integer.parseInt(choice);
+			UI.say(PUBLISHERMENU);
+			int choiceNum = UI.readInt();
 				
-				switch(choiceNum) {
-					case 1:
-						printDivider();
-						manager.showPublisherList();						
-					break;
-					case 2:
-						printDivider();
-						manager.createPublisher();
-					break;
-					case 3:
-						printDivider();
-						manager.updatePublisher();						
-					break;
-					case 4:
-						printDivider();
-						manager.deletePublisher();
-					break;
-					case 99:
-						flag = false;
-						printDivider();
-						runMainMenu();
-					break;
-					default:
-						Program.say("Not a valid option");						
-					break;
-				}								
-			}
-			else {
-				Program.say("Not a valid option");
-			}
-		}	
-		
+			switch(choiceNum) {
+				case 1:
+					printDivider();
+					manager.showPublisherList();	
+					printDivider();
+				break;
+				case 2:
+					printDivider();
+					manager.createPublisher();
+				break;
+				case 3:
+					printDivider();
+					manager.updatePublisher();						
+				break;
+				case 4:
+					printDivider();
+					manager.deletePublisher();
+				break;
+				case 99:
+					flag = false;
+					printDivider();
+					runMainMenu();
+				break;
+				default:
+					UI.say("Not a valid option");						
+				break;
+			}		
+		}			
 	}
 	
-	private static void printDivider() { Program.say(DIVIDER); }
+	private static void printDivider() { UI.say(DIVIDER); }
 }

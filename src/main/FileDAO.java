@@ -165,7 +165,7 @@ public class FileDAO {
 			writer.close();
 		}
 		catch(Exception ex) {
-			Program.say(ex.getMessage());
+			UI.say(ex.getMessage());
 		}
 	}
 	
