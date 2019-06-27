@@ -9,9 +9,7 @@ public class Program {
 	public static void main(String[] args) {		
 		FileDAO.initDAO();
 		
-		Menu.mainProgram();	
-		
-		
+		Menu.mainProgram();			
 	}
 	
 	

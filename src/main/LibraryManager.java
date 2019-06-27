@@ -89,7 +89,10 @@ public class LibraryManager {
 		return new Book(0, "No Book", new Author(), new Publisher());
 	}
 	
+	public static void createNewBook() {
+		Scanner scan = new Scanner(System.in);
 	
+	}
 	
 	
 }

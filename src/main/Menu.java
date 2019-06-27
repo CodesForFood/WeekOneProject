@@ -15,7 +15,7 @@ public class Menu {
 	
 	public final static String MAINMENU = "<1>Manage Books \n"
 			+ "<2>Manage Authors \n"
-			+ "<3>Manage Publishers \n "
+			+ "<3>Manage Publishers \n"
 			+ "<99>Exit Program";
 	
 	public final static String BOOKMENU = "<1>View all Book \n"
