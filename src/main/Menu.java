@@ -100,10 +100,12 @@ public class Menu {
 						manager.createBook();
 					break;
 					case 3:
-						
-						
+						printDivider();
+						manager.updateBook();												
 					break;
 					case 4:
+						printDivider();
+						manager.deleteBook();
 					break;
 					case 99:
 						flag = false;
@@ -186,6 +188,8 @@ public class Menu {
 						manager.updatePublisher();						
 					break;
 					case 4:
+						printDivider();
+						manager.deletePublisher();
 					break;
 					case 99:
 						flag = false;

@@ -135,6 +135,96 @@ public class LibraryManager {
 		return book;
 	}	
 	
+	public void updateBook() {
+		boolean flag = true;
+		while(flag) {
+			Program.say("Which book do you want to update?");
+			showBookList();
+			String input = Menu.scan.nextLine();
+			if(Program.tryParseInt(input)) {
+				int choice = Integer.parseInt(input);
+				Book book = getBookById(choice);
+				if(book.getId() == 0) {
+					Program.say("Not a valid option");
+					continue;
+				}
+				Program.say("Which do you want to change? \n<1>Book's name \n<2>Author of book \n<3>Publisher of book");
+				input = Menu.scan.nextLine();
+				if(Program.tryParseInt(input)) {
+					choice = Integer.parseInt(input);
+					if(choice == 1) {
+						Program.say("What is the new name of the book?");
+						String name = Menu.scan.nextLine();
+						book.setName(name);
+						flag = false;
+						fDAO.updateBooks();
+					}
+					else if(choice == 2) {
+						Author auth = promptGetAuthor();
+						book.setAuthor(auth);
+						flag = false;
+						fDAO.updateBooks();
+					}
+					else if(choice == 3) {
+						Publisher pub = promptGetPublisher();
+						book.setPublisher(pub);
+						flag = false;
+						fDAO.updateBooks();
+					}
+					else {
+						Program.say("Not a valid option");
+						flag = true;
+					}
+				}
+				else {
+					Program.say("Invalid input");
+					flag = true;
+				}				
+			}
+			else {
+				Program.say("Not a valid option");
+				flag = true;
+			}
+		}
+	}
+	
+	private Author promptGetAuthor() {
+		boolean flag = true;
+		while(flag) {
+			Program.say("Which author do you want to use?");
+			showAuthorList();
+			String input = Menu.scan.nextLine();
+			if(Program.tryParseInt(input)) {
+				int choice = Integer.parseInt(input);
+				flag = false;
+				return getAuthorById(choice);
+			}
+			else {
+				flag = true;
+				Program.say("Not a valid option");
+			}			
+		}
+		return new Author();		
+	}
+	
+	private Publisher promptGetPublisher() {
+		boolean flag = true;
+		while(flag) {
+			Program.say("Which publisher do you want to use?");
+			showPublisherList();
+			String input = Menu.scan.nextLine();
+			if(Program.tryParseInt(input)) {
+				int choice = Integer.parseInt(input);
+				flag = false;
+				return getPublisherById(choice);
+			}
+			else {
+				flag = true;
+				Program.say("Not a valid option");
+			}			
+		}
+		return new Publisher();		
+	}
 	
 	public void updateAuthor() {
 		boolean flag = true;
@@ -213,6 +303,51 @@ public class LibraryManager {
 		
 	}
 	
+	public void deletePublisher() {
+		boolean flag = true;
+		while(flag) {
+			Program.say("Which publisher do you want to delete?");
+			showPublisherList();			
+			String input = Menu.scan.nextLine();
+			
+			if(Program.tryParseInt(input)) {
+				int choice = Integer.parseInt(input);
+				publisherList.remove(getPublisherById(choice));
+				for(Book book : bookList) {
+					if(book.getPublisher().getId() == choice) {
+						book.setPublisher(new Publisher());
+					}
+				}
+				fDAO.updatePublishers();
+				fDAO.updateBooks();
+				flag = false;
+			}
+			else {
+				Program.say("Invalid option");				
+			}
+		}	
+	}
+	
+	public void deleteBook() {
+		boolean flag = true;
+		while(flag) {
+			Program.say("Which book do you want to delete?");
+			showBookList();
+			String input = Menu.scan.nextLine();
+			
+			if(Program.tryParseInt(input)) {
+				int choice = Integer.parseInt(input);
+				bookList.remove(getBookById(choice));
+				fDAO.updateBooks();			
+				flag = false;
+			}
+			else {
+				Program.say("Invalid input");
+				flag = true;
+			}
+		}		
+	}
+	
 	
 	private Publisher newOrOldPublisher() {
 		boolean flag = true;
@@ -267,8 +402,7 @@ public class LibraryManager {
 				
 				if(choiceNum == 1) {
 					flag = false;
-					return createAuthor();
-				
+					return createAuthor();				
 				}
 				else if(choiceNum == 2) {
 					flag = false;
