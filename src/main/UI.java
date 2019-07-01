@@ -31,6 +31,10 @@ public class UI {
 		}
 	}
 	
+	public static void emptyList(String type) {
+		UI.say("The " + type + " list is empty");		
+	}
+	
 	public static void badInput() {
 		say("Invalid option");
 	}

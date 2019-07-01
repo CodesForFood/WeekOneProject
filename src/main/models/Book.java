@@ -1,5 +1,7 @@
 package main.models;
 
+import main.UI;
+
 public class Book {
 	
 	private int id = 0;
@@ -29,4 +31,11 @@ public class Book {
 		this.author = author;
 		this.publisher = publisher;		
 	}
+	
+	
+	public void displayName() {
+		UI.say(this.getId() + ") " + this.getName() + ", Author: " 
+				+ getAuthor().getName() + ", Publisher: " + getPublisher().getName());
+	}
+	
 }

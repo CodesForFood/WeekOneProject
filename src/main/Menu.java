@@ -13,9 +13,10 @@ public class Menu {
 			+ "<99>Exit Program";
 	
 	public final static String BOOKMENU = "<1>View all Book \n"
-			+ "<2>Add a Book \n"
-			+ "<3>Update a Book \n"
-			+ "<4>Delete a Book \n"
+			+ "<2>Get single book by name \n"
+			+ "<3>Add a Book \n"
+			+ "<4>Update a Book \n"
+			+ "<5>Delete a Book \n"
 			+ "<99>Go Back";
 	
 	public final static String AUTHORMENU = "<1>View all Authors \n"
@@ -69,7 +70,7 @@ public class Menu {
 				break;
 				default:
 					flag = true;
-					UI.say("Not a valid option");						
+					UI.badInput();					
 				break;
 			}								
 		}				
@@ -85,21 +86,40 @@ public class Menu {
 			switch(choiceNum) {
 				case 1:
 					printDivider();
-					manager.showBookList();	
+					if(LibraryManager.bookList.size() <= 0) {
+						UI.emptyList(LibraryManager.BOOK);
+					}
+					else {
+						manager.showBookList();	
+					}						
 					printDivider();
-				break;
+					break;
 				case 2:
 					printDivider();
-					manager.createBook();
-				break;
-				case 3:					
+					manager.displayBookByName();
+					break;
+				case 3:
 					printDivider();
-					manager.updateBook();												
-				break;
+					manager.createBook();
+					break;
 				case 4:					
 					printDivider();
-					manager.deleteBook();
-				break;
+					if(LibraryManager.bookList.size() <= 0) {
+						UI.emptyList(LibraryManager.BOOK);
+					}
+					else {
+						manager.updateBook();	
+					}															
+					break;
+				case 5:					
+					printDivider();					
+					if(LibraryManager.bookList.size() <= 0) {
+						UI.emptyList(LibraryManager.BOOK);
+					}
+					else {
+						manager.deleteBook();	
+					}
+					break;
 				case 99:
 					flag = false;
 					printDivider();
@@ -107,7 +127,7 @@ public class Menu {
 				break;
 				default:
 					UI.say("Not a valid option");						
-				break;
+					break;
 			}					
 		}		
 	}
@@ -122,29 +142,44 @@ public class Menu {
 			switch(choiceNum) {
 				case 1:
 					printDivider();
-					manager.showAuthorList();	
+					if(LibraryManager.authorList.size() <= 0) {
+						UI.emptyList(LibraryManager.AUTHOR);
+					}
+					else {
+						manager.showAuthorList();
+					}
 					printDivider();
-				break;
+					break;
 				case 2:					
 					printDivider();
 					manager.createAuthor();
-				break;
+					break;
 				case 3:					
 					printDivider();
-					manager.updateAuthor();
-				break;
+					if(LibraryManager.authorList.size() <= 0) {
+						UI.emptyList(LibraryManager.AUTHOR);
+					}
+					else {
+						manager.updateAuthor();
+					}					
+					break;
 				case 4:
 					printDivider();
-					manager.deleteAuthor();
-				break;
+					if(LibraryManager.authorList.size() <= 0) {
+						UI.emptyList(LibraryManager.AUTHOR);
+					}
+					else {
+						manager.deleteAuthor();	
+					}				
+					break;
 				case 99:
 					flag = false;
 					printDivider();
 					runMainMenu();
-				break;
+					break;
 				default:
 					UI.say("Not a valid option");						
-				break;
+					break;
 			}								
 		}		
 	}
@@ -158,29 +193,44 @@ public class Menu {
 			switch(choiceNum) {
 				case 1:
 					printDivider();
-					manager.showPublisherList();	
+					if(LibraryManager.authorList.size() <= 0) {
+						UI.emptyList(LibraryManager.AUTHOR);
+					}
+					else {
+						manager.showPublisherList();
+					}
 					printDivider();
-				break;
+					break;
 				case 2:
 					printDivider();
 					manager.createPublisher();
-				break;
+					break;
 				case 3:
 					printDivider();
-					manager.updatePublisher();						
-				break;
+					if(LibraryManager.publisherList.size() <= 0) {
+						UI.emptyList(LibraryManager.PUBLISHER);
+					}
+					else {
+						manager.updatePublisher();
+					}											
+					break;
 				case 4:
 					printDivider();
-					manager.deletePublisher();
-				break;
+					if(LibraryManager.publisherList.size() <= 0) {
+						UI.emptyList(LibraryManager.PUBLISHER);
+					}
+					else {
+						manager.deletePublisher();
+					}
+					break;
 				case 99:
 					flag = false;
 					printDivider();
 					runMainMenu();
-				break;
+					break;
 				default:
 					UI.say("Not a valid option");						
-				break;
+					break;
 			}		
 		}			
 	}

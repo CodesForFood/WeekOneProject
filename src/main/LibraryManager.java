@@ -18,7 +18,9 @@ public class LibraryManager {
 	
 	public LibraryManager() {
 		fDAO = new FileDAO();
+		
 	}		
+	
 	
 	public void showAuthorList() {
 		for(Author auth : authorList) {
@@ -37,7 +39,7 @@ public class LibraryManager {
 			final String authName = book.getAuthor().getName();
 			final String pubName = book.getPublisher().getName();		
 			
-			UI.say(book.getId() + ") " + book.getName() + ", Author: " + authName + ", Publisher: " + pubName);
+			book.displayName();
 		}
 	}
 	
@@ -96,6 +98,26 @@ public class LibraryManager {
 		return new Book(0, "No Book", new Author(), new Publisher());
 	}	
 
+	public void displayBookByName() {
+		UI.say("Please enter the name of the book");
+		String name = UI.readLine();
+		Book theBook = new Book();
+		
+		for(Book book : bookList) {
+			if(book.getName().equalsIgnoreCase(name)) {
+				theBook = book;
+				break;
+			}
+		}
+		
+		if(theBook.getId() == 0) {
+			UI.say("No book by the name " + name + " was found");
+		}
+		else {
+			theBook.displayName();
+		}		
+	}
+	
 	public Author createAuthor() {
 		UI.say("Please enter the name of the author");	
 		String name = UI.readLine();
